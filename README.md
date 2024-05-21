@@ -25,6 +25,7 @@ Image Rater is a Python-based application designed to help users compare and rat
 2. Install the required Python packages using pip:
     ```sh
     pip install pillow
+    pip install tkinter
     ```
 
 ### Running the Program
@@ -58,13 +59,17 @@ Image Rater is a Python-based application designed to help users compare and rat
 
 ### Folder Organization
 
-At the end of the comparison process, images are copied into the following folders based on their ratings:
+At the end of the comparison process, images are **copied** into the following folders based on their ratings:
 
 - `rated_5` - Top 20% of images
 - `rated_4` - 20-40% of images
 - `rated_3` - 40-60% of images
 - `rated_2` - 60-80% of images
 - `rated_1` - Bottom 20% of images
+
+During the comparison process, when an image is marked as Rejected using the "Reject Left" or "Reject Right" button, it is immediately **moved** to the "rejected" folder:
+- `rejected` - Images that were marked as Rejected are moved here in real-time
+
 
 These folders will be created in the same directory as the selected image folder.
 
