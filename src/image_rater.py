@@ -201,13 +201,24 @@ class ImageRater:
                 self.current_comparison_number = progress_data.get("current_comparison_number", 0)
                 self.current_comparison = progress_data.get("current_comparison")
 
-                # Update ratings dictionary with new images
-                for image in self.image_files:
-                    if image not in loaded_ratings:
-                        loaded_ratings[image] = 1500
+                # Update ratings dictionary to remove deleted images
+                updated_ratings = {image: rating for image, rating in loaded_ratings.items() if image in self.image_files}
+                self.ratings = updated_ratings
 
-                self.ratings = loaded_ratings
-                print("Progress loaded.")
+                # Update comparisons to remove deleted images
+                updated_comparisons = [(image1, image2) for image1, image2 in self.comparisons if image1 in self.image_files and image2 in self.image_files]
+                self.comparisons = updated_comparisons
+
+                # Update current comparison if it contains deleted images
+                if self.current_comparison:
+                    image1, image2 = self.current_comparison
+                    if image1 not in self.image_files or image2 not in self.image_files:
+                        self.current_comparison = None
+
+                # Recalculate current comparison number based on updated comparisons
+                self.current_comparison_number = len(self.comparisons)
+
+                print("Progress loaded and updated.")
 
                 # Start the comparison process only if there is a current comparison
                 if hasattr(self, 'canvas') and self.canvas and self.current_comparison:
