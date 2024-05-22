@@ -2,6 +2,8 @@
 
 Image Rater is a Python-based application designed to help users compare and rate images in a specified folder. Users can visually compare pairs of images, choose the better one, and reject unwanted images. The program keeps track of progress and saves ratings for future use. At the end of the process, the best-rated images are copied to separate folders based on their ratings.
 
+Summary of usage:  Once a folder is selected, 2 images will be displayed.  The user chooses which one of the 2 images they like better.  This rating is saved. Then it will show a different image to compare it to.  The user keeps choosing which of the 2 images are better until all of the images have been compared against each other.  Once complete and the program ends, the images are ranked 1 (lowest) - 5 (highest) and copied into subfolders according to their ranking. The ranked 5 folder would contain your favorite images.
+
 ## Features
 
 - **Image Comparison:** Visually compare two images at a time and choose the better one.
@@ -19,11 +21,13 @@ Image Rater is a Python-based application designed to help users compare and rat
   - `PIL` (Pillow)
   - `tkinter`
 
+## Tested with Windows operating system, not sure how this would work on anything else.
+
 ### Installation
 
 1. Clone the repository or download the source code.
 2. Install the required Python packages using pip:
-    ```sh
+    ```
     pip install pillow
     pip install tkinter
     ```
@@ -32,7 +36,7 @@ Image Rater is a Python-based application designed to help users compare and rat
 
 1. Navigate to the directory containing the `ImageRater` script.
 2. Run the script:
-    ```sh
+    ```
     python image_rater.py
     ```
 3. A file dialog will prompt you to select a folder containing images.
@@ -51,11 +55,11 @@ Image Rater is a Python-based application designed to help users compare and rat
    - Use the "Reject Right" button to reject the right image.
 
 4. **Ending the Comparison:**
-   - Click the "End Now" button to end the comparison and save progress.
-   - Click the "Save and Quit" button to save progress and exit the application.
+    - The "Save and Quit" button saves the progress and exits the application without copying any files.
+    - The "End Now" button saves the progress, copies the rated images to their respective folders, and then exits the application.
 
 5. **Progress:**
-   - The current comparison number and total comparisons are displayed at the bottom of the window.
+   - The current comparison number and total comparisons are displayed at the bottom of the window.  You can reduce the number of comparisons by rejecting images.
 
 ### Folder Organization
 
