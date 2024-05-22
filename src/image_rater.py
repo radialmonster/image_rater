@@ -27,13 +27,14 @@ class ImageRater:
             self.end_comparison()
             return
 
-        if len(self.comparisons) < self.num_images * (self.num_images - 1) // 2 and len(self.image_files) > 1:
-            image1, image2 = self.get_next_comparison()
-            self.current_comparison = (image1, image2)
-            self.show_images(image1, image2)
-        else:
-            print("All possible comparisons have been made.")
-            self.end_comparison()
+        if not self.current_comparison:
+            if len(self.comparisons) < self.num_images * (self.num_images - 1) // 2 and len(self.image_files) > 1:
+                image1, image2 = self.get_next_comparison()
+                self.current_comparison = (image1, image2)
+                self.show_images(image1, image2)
+            else:
+                print("All possible comparisons have been made.")
+                self.end_comparison()
 
     def get_next_comparison(self):
         while True:
@@ -98,11 +99,29 @@ class ImageRater:
             shutil.move(os.path.join(self.folder_path, rejected_image), os.path.join(self.rejected_folder_path, rejected_image))
             self.image_files.remove(rejected_image)
             del self.ratings[rejected_image]  # Remove the rejected image from the ratings dictionary
-            self.current_comparison = None
             self.num_images -= 1
             self.total_comparisons = self.num_images * (self.num_images - 1) // 2  # Update total_comparisons
             self.update_progress_label()
-            self.compare_images()
+            
+            # Get the remaining image from the current comparison
+            remaining_image = self.current_comparison[1 if side == 'left' else 0]
+            
+            # Find a new image to compare with the remaining image
+            new_image = self.get_next_image(remaining_image)
+            
+            if new_image:
+                self.current_comparison = (remaining_image, new_image) if side == 'right' else (new_image, remaining_image)
+                self.show_images(*self.current_comparison)
+            else:
+                self.current_comparison = None
+                self.compare_images()
+
+    def get_next_image(self, current_image):
+        for image in self.image_files:
+            if image != current_image and (current_image, image) not in self.comparisons and (image, current_image) not in self.comparisons:
+                self.comparisons.append((current_image, image))
+                return image
+        return None
 
     def update_ratings(self, image1, image2, winner):
         k = 32  # K-factor, determines the maximum rating change
