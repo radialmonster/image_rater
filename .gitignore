@@ -1,4 +1,6 @@
-__pycache__/
+
+_pycache__/
 *.pyc
 *.pyo
 .vscode/
+/docs

@@ -1,109 +1,62 @@
 # Image Rater
 
-Image Rater is a Python-based application designed to help users compare and rate images in a specified folder. Users can visually compare pairs of images, choose the better one, and reject unwanted images. The program keeps track of progress and saves ratings for future use. At the end of the process, the best-rated images are copied to separate folders based on their ratings.
-
-Summary of usage:  Once a folder is selected, 2 images will be displayed.  The user chooses which one of the 2 images they like better.  This rating is saved. Then it will show a different image to compare it to.  The user keeps choosing which of the 2 images are better until all of the images have been compared against each other.  Once complete and the program ends, the images are ranked 1 (lowest) - 5 (highest) and copied into subfolders according to their ranking. The ranked 5 folder would contain your favorite images.
+Image Rater is a Python-based application that allows users to compare and rate images using an intuitive graphical user interface (GUI). It supports drag-and-drop functionality, EXIF metadata editing, and sorting images into folders based on their ratings. This tool is perfect for photographers, designers, or anyone who needs to organize and rate images efficiently.
 
 ## Features
 
-- **Image Comparison:** Visually compare two images at a time and choose the better one.
-- **Image Rejection:** Reject unwanted images to remove them from the comparison process.
-- **Rating System:** Uses a rating system to rank images based on user choices.
-- **Progress Saving:** Saves progress and ratings, allowing users to continue where they left off.
-- **Folder Organization:** Copies the top-rated images to separate folders for easy access.
+- **Intuitive GUI**: Compare images side-by-side and rate them with ease.
+- **Drag-and-Drop Support**: Quickly add images or saved sets by dragging them into the application.
+- **EXIF Metadata Editing**: Save ratings directly into the image's metadata (JPEG only).
+- **Folder Organization**: Automatically sort images into folders based on their ratings.
+- **Progress Saving**: Save and load rating sessions to continue later.
+- **Keyboard Shortcuts**: Enhance productivity with shortcuts for rating, rejecting, and saving progress.
+- **Cross-Platform**: Works on Windows, macOS, and Linux.
 
-## User Guide
+## Demo
 
-### Prerequisites
+Watch the demo video to see Image Rater in action:
+[![Demo Video](https://img.youtube.com/vi/aqHT-Z7Lqiw/0.jpg)](https://youtu.be/aqHT-Z7Lqiw)
 
-- Python 3.x
-- Required Python packages:
-  - `PIL` (Pillow)
-  - `tkinter`
+## Installation
 
-## Tested with Windows operating system, not sure how this would work on anything else.
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/yourusername/image-rater.git
+   cd image-rater
+   ```
 
-### Installation
+2. **Install Dependencies**
+   Make sure you have Python 3.7 or later installed. Then, install the required Python packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-1. Clone the repository or download the source code.
-2. Install the required Python packages using pip:
-    ```
-    pip install pillow
-    pip install tkinter
-    ```
+3. **Run the Application**
+   ```bash
+   python src/image_rater.py
+   ```
 
-### Running the Program
+4. **Optional**: Install `tkinterdnd2` for drag-and-drop support:
+   ```bash
+   pip install tkinterdnd2
+   ```
 
-1. Navigate to the directory containing the `ImageRater` script.
-2. Run the script:
-    ```
-    python image_rater.py
-    ```
-3. A file dialog will prompt you to select a folder containing images.
+5. **Optional**: Install `piexif` for EXIF metadata editing:
+   ```bash
+   pip install piexif
+   ```
 
-### Using the Application
+## Usage
 
-1. **Starting the Comparison:**
-   - After selecting the folder, the application will start and display pairs of images for comparison.
+1. Launch the application by running the `image_rater.py` script.
+2. Select a folder or individual image files to start rating.
+3. Use the GUI to compare images, rate them, and organize them into folders.
+4. Save your progress and continue later if needed.
 
-2. **Comparing Images:**
-   - Use the "Left is better" button or the left arrow key to select the left image as better.
-   - Use the "Right is better" button or the right arrow key to select the right image as better.
+## Contributing
 
-3. **Rejecting Images:**
-   - Use the "Reject Left" button to reject the left image.
-   - Use the "Reject Right" button to reject the right image.
+Contributions are welcome! Feel free to fork the repository and submit a pull request.
 
-4. **Ending the Comparison:**
-    - The "Save and Quit" button saves the progress and exits the application without copying any files.
-    - The "End Now" button saves the progress, copies the rated images to their respective folders, and then exits the application.
+## License
 
-5. **Progress:**
-   - The current comparison number and total comparisons are displayed at the bottom of the window.  You can reduce the number of comparisons by rejecting images.
-
-### Folder Organization
-
-At the end of the comparison process, images are **copied** into the following folders based on their ratings:
-
-- `rated_5` - Top 20% of images
-- `rated_4` - 20-40% of images
-- `rated_3` - 40-60% of images
-- `rated_2` - 60-80% of images
-- `rated_1` - Bottom 20% of images
-
-During the comparison process, when an image is marked as Rejected using the "Reject Left" or "Reject Right" button, it is immediately **moved** to the "rejected" folder:
-- `rejected` - Images that were marked as Rejected are moved here in real-time
-
-
-These folders will be created in the same directory as the selected image folder.
-
-### Saving Progress
-
-The program automatically saves progress to a file named `progress.json` in the selected image folder. This file contains:
-
-- Current ratings
-- Completed comparisons
-- Current comparison number
-
-When the program is run again, it will load this file and resume the comparison from where it left off.
-
-### Known Issues
-
-- Images not found or invalid will be skipped with an error message.
-- Ensure the selected folder contains only valid image files to avoid issues.
-
-### License
-
-This project is licensed under the MIT License.
-
-### Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request.
-
-### Contact
-
-For any issues or questions, please open an issue on GitHub.
-
----
-
-Enjoy rating your images with Image Rater!
+This project is licensed under the MIT License. See the `LICENSE` file for details.
