@@ -9,8 +9,7 @@ Image Rater is a Python-based application that allows users to compare and rate 
 - **EXIF Metadata Editing**: Save ratings directly into the image's metadata (JPEG only).
 - **Folder Organization**: Automatically sort images into folders based on their ratings.
 - **Progress Saving**: Save and load rating sessions to continue later.
-- **Keyboard Shortcuts**: Enhance productivity with shortcuts for rating, rejecting, and saving progress.
-- **Cross-Platform**: Works on Windows, macOS, and Linux.
+- **Keyboard Shortcuts**: Use keyboard Left and Right arrow keys to select the Left or Right image is better
 
 ## Demo
 
@@ -52,6 +51,10 @@ Watch the demo video to see Image Rater in action:
 2. Select a folder or individual image files to start rating.
 3. Use the GUI to compare images, rate them, and organize them into folders.
 4. Save your progress and continue later if needed.
+
+## Support the Project
+
+If you find this project helpful and would like to buy me a pizza, you may [Donate via PayPal](https://www.paypal.com/paypalme/radialmonster)
 
 ## Contributing
 
