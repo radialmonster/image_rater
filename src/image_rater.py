@@ -368,16 +368,15 @@ class ImageRater:
 
     def compare_images(self):
         self.update_progress_label()
-        
+
         # If we're working with a folder, check the rejected folder
         if self.is_folder:
             self.image_files = [f for f in self.image_files if f not in os.listdir(self.rejected_folder_path)]
-        
+
         if not self.image_files or len(self.image_files) < 2:
             print("All comparisons complete or not enough images left to compare.")
-            # Just show message but don't end comparison automatically
             messagebox.showinfo("Rating Complete", "All image comparisons are complete!\nUse one of the buttons at the bottom to process or save your ratings.")
-            # Don't call end_comparison() here - let user decide what to do next
+            self.update_progress_label()  # Ensure the label reflects the completed state
             return
 
         if not self.current_comparison:
@@ -387,9 +386,8 @@ class ImageRater:
                 self.show_images(image1, image2)
             else:
                 print("All possible comparisons have been made.")
-                # Just show message but don't end comparison automatically
                 messagebox.showinfo("Rating Complete", "All image comparisons are complete!\nUse one of the buttons at the bottom to process or save your ratings.")
-                # Don't call end_comparison() here - let user decide what to do next
+                self.update_progress_label()  # Ensure the label reflects the completed state
                 return
 
     def get_next_comparison(self):
@@ -474,36 +472,52 @@ class ImageRater:
     def reject_image(self, side):
         if self.current_comparison:
             rejected_image = self.current_comparison[0 if side == 'left' else 1]
-            
+
+            # Move the rejected image to the rejected folder without deleting the original
             if self.is_folder:
                 # Create rejected folder as a subfolder of the original folder
                 self.rejected_folder_path = os.path.join(self.folder_path, "rejected")
-                os.makedirs(self.rejected_folder_path, exist_ok=True)
-                
+                try:
+                    os.makedirs(self.rejected_folder_path, exist_ok=True)
+                    print(f"Rejected folder created at: {self.rejected_folder_path}")
+                except Exception as e:
+                    print(f"Error creating rejected folder: {e}")
+
                 src_path = os.path.join(self.folder_path, rejected_image)
                 dst_path = os.path.join(self.rejected_folder_path, rejected_image)
             else:
-                # For drag and drop files, create a temporary directory for rejected files
-                self.temp_dir = os.path.join(os.path.expanduser("~"), "ImageRaterTemp")
-                self.rejected_folder_path = os.path.join(self.temp_dir, "rejected")
-                os.makedirs(self.rejected_folder_path, exist_ok=True)
-                
+                # For drag and drop files, create the rejected folder in the same directory as the image
                 src_path = self.file_paths.get(rejected_image, rejected_image)
-                dst_path = os.path.join(self.rejected_folder_path, rejected_image)
-                
-            shutil.move(src_path, dst_path)
+                image_dir = os.path.dirname(src_path)
+                self.rejected_folder_path = os.path.join(image_dir, "rejected")
+                try:
+                    os.makedirs(self.rejected_folder_path, exist_ok=True)
+                    print(f"Rejected folder created at: {self.rejected_folder_path}")
+                except Exception as e:
+                    print(f"Error creating rejected folder: {e}")
+
+                dst_path = os.path.join(self.rejected_folder_path, os.path.basename(src_path))
+
+            # Copy the rejected image instead of moving it
+            try:
+                shutil.copy(src_path, dst_path)
+                print(f"Copied {rejected_image} to rejected folder: {dst_path}")
+            except Exception as e:
+                print(f"Error copying rejected image: {e}")
+
+            # Remove the rejected image from the comparison list but keep it in the source folder
             self.image_files.remove(rejected_image)
             del self.ratings[rejected_image]  # Remove the rejected image from the ratings dictionary
             self.num_images -= 1
             self.total_comparisons = self.num_images * (self.num_images - 1) // 2  # Update total_comparisons
             self.update_progress_label()
-            
+
             # Get the remaining image from the current comparison
             remaining_image = self.current_comparison[1 if side == 'left' else 0]
-            
+
             # Find a new image to compare with the remaining image
             new_image = self.get_next_image(remaining_image)
-            
+
             if new_image:
                 self.current_comparison = (remaining_image, new_image) if side == 'right' else (new_image, remaining_image)
                 self.show_images(*self.current_comparison)
@@ -532,8 +546,9 @@ class ImageRater:
             self.ratings[image2] += k * (1 - expected2)
 
     def update_progress_label(self):
-        total_comparisons = len(self.image_files) * (len(self.image_files) - 1) // 2
-        progress_text = f"Comparison {self.current_comparison_number} of {total_comparisons}"
+        total_comparisons = self.num_images * (self.num_images - 1) // 2
+        completed_comparisons = len(self.comparisons)
+        progress_text = f"{completed_comparisons} comparisons completed!"
         self.progress_label.config(text=progress_text)
 
     def end_comparison(self):
